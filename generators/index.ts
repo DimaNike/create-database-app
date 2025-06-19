@@ -106,7 +106,10 @@ export default class extends Generator {
             this.templatePath( this.options.templateChoice ),
             this.destinationPath(),
             {
-                appName: this.options.appName
+                appName: this.options.appName,
+                connectionUsername: this.options.connectionUsername,
+                connectionPassword: this.options.connectionPassword,
+                serviceName: this.options.serviceName
             }
         );
         this.fs.copy(

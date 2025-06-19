@@ -483,6 +483,9 @@ export default class Generate extends Command {
             Object.assign(configObject, {
                 connectionString: generateConnectionString( protocol, hostname, port, serviceValue )
             });
+            Object.assign(configObject, {
+                serviceName: serviceValue
+            });
         } else if( databaseConnectionType === 'walletPath' ) {
             let walletPath = '';
 
