@@ -7,12 +7,21 @@ services:
       - ORACLE_PDB=FREEPDB1
       - ORACLE_PWD=oracle
       - DBHOST=database
-    volumes:
-      - ./utils/database/setup:/opt/oracle/scripts/startup
     ports:
       - 1235:1521
     mem_limit: 4096m
-    cpus: 2
+    cpus: 2    
+
+  liquibase:
+    image: liquibase/liquibase:latest
+    volumes:
+       - ./liquibase/changelog:/liquibase/changelog
+    working_dir: /liquibase/changelog
+    command: --defaultsFile=liquibase.properties update
+    depends_on:
+      db23:
+        condition: service_healthy
+
   ords-node1:
     hostname: ords-node
     image: container-registry.oracle.com/database/ords:latest
@@ -25,7 +34,7 @@ services:
     ports:
       - 8080:8080   
     healthcheck:
-      test: curl --noproxy "localhost" -f -k http://localhost:8080/ords/ || exit 1
+      test: curl --noproxy "localhost" -f -k http://database:8080/ords/ || exit 1
       interval: 30s
       timeout: 10s
       retries: 150

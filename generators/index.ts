@@ -100,6 +100,7 @@ export default class extends Generator {
                     appName: this.options.appName
                 }
             );
+            this.options.connectionUsername = this.options.connectionUsername.toUpperCase();
         }
         // Copy files that are common to all of the templates.
         this.fs.copyTpl(
