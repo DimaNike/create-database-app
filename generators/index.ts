@@ -100,19 +100,23 @@ export default class extends Generator {
                     appName: this.options.appName
                 }
             );
-            this.options.connectionUsername = this.options.connectionUsername.toUpperCase();
+            this.options.connectionUsername = this.options.connectionUsername.toLowerCase();
+            this.fs.copyTpl(
+                this.templatePath( this.options.templateChoice ),
+                this.destinationPath(),
+                this.options
+            );
+        } else {
+            // Copy files that are common to all of the templates.
+            this.fs.copyTpl(
+                this.templatePath( this.options.templateChoice ),
+                this.destinationPath(),
+                {
+                    appName: this.options.appName
+                }
+            );
         }
-        // Copy files that are common to all of the templates.
-        this.fs.copyTpl(
-            this.templatePath( this.options.templateChoice ),
-            this.destinationPath(),
-            {
-                appName: this.options.appName,
-                connectionUsername: this.options.connectionUsername,
-                connectionPassword: this.options.connectionPassword,
-                serviceName: this.options.serviceName
-            }
-        );
+        
         this.fs.copy(
             this.templatePath(`${ path.dirname( this.options.templateChoice ) }/app/.github`),
             this.destinationPath('.github')

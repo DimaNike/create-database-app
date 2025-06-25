@@ -14,6 +14,7 @@
         "deploy": "node deploy.mjs",
         "initdb": "node utils/db.mjs utils/database/initdb.sql",
         "cleandb": "node utils/db.mjs utils/database/cleanup.sql",
+        "ords": "node mle-cli/generate.mjs && node utils/db.mjs rest/ords.sql",
         "test": "vitest"
     }
 }
