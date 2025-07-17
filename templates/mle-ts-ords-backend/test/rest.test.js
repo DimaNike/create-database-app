@@ -1,20 +1,20 @@
 import { beforeEach, afterEach, describe, it, expect } from 'vitest';
 
-const BASE_URL = 'http://<%= ordsHost %>:<%= ordsPort %>/ords/<%= connectionUsername %>';
+const BASE_URL = 'http://localhost:8080/ords/userc';
 let createdUserId;
 let skipCleanup = false;
 
 
 beforeEach(async () => {
   skipCleanup = false;
-  const res = await fetch(`${BASE_URL}/create?name=perry`, { method: 'POST' });
+  const res = await fetch(`${BASE_URL}/users?name=perry`, { method: 'POST' });
   const data = await res.json();
   createdUserId = data.id;
 });
 
 afterEach(async () => {
   if (!skipCleanup) {
-    await fetch(`${BASE_URL}/delete/${createdUserId}`, { method: 'DELETE' });
+    await fetch(`${BASE_URL}/users/${createdUserId}`, { method: 'DELETE' });
   }
 });
 
@@ -25,7 +25,7 @@ describe('ORDS User Endpoints', () => {
   });
 
   it('should retrieve the created user (GET)', async () => {
-    const res = await fetch(`${BASE_URL}/${createdUserId}`);
+    const res = await fetch(`${BASE_URL}/users/${createdUserId}`);
     expect(res.status).toBe(200);
     const user = await res.json();
     expect(user).toBe('perry');
@@ -33,7 +33,7 @@ describe('ORDS User Endpoints', () => {
   });
 
   it('should update the user name (PUT)', async () => {
-    const res = await fetch(`${BASE_URL}/edit/${createdUserId}?name=Katty`, {
+    const res = await fetch(`${BASE_URL}/users/${createdUserId}?name=Katty`, {
       method: 'PUT'
     });
 
@@ -43,7 +43,7 @@ describe('ORDS User Endpoints', () => {
     console.log('User updated');
 
     //should confirm the user name was updated (GET)
-    const res1 = await fetch(`${BASE_URL}/${createdUserId}`);
+    const res1 = await fetch(`${BASE_URL}/users/${createdUserId}`);
     expect(res1.status).toBe(200);
     const user = await res1.json();
     expect(user).toBe('Katty');
@@ -51,14 +51,14 @@ describe('ORDS User Endpoints', () => {
   });
   
   it('should delete the user (DELETE)', async () => {
-    const res = await fetch(`${BASE_URL}/delete/${createdUserId}`, { method: 'DELETE' });
+    const res = await fetch(`${BASE_URL}/users/${createdUserId}`, { method: 'DELETE' });
     expect(res.status).toBe(200);
     const result = await res.json();
     expect(result).toHaveProperty('rowsDeleted', 1);
     console.log('User deleted');
 
     //should not find deleted user (GET)
-    const res1 = await fetch(`${BASE_URL}/${createdUserId}`);
+    const res1 = await fetch(`${BASE_URL}/users/${createdUserId}`);
     expect(res1.status).toBe(404);
     const result1 = await res1.json();
     expect(result1).toHaveProperty('msg', 'User not found');

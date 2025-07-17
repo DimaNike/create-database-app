@@ -1,0 +1,18 @@
+{
+  "databaseChangeLog": [
+    {
+      "changeSet": {
+        "id": "V001__init",
+        "author": "mlebase",
+        "changes": [
+          {
+            "sqlFile": {
+              "path": "migrations/V001__init.sql",
+              "relativeToChangelogFile": true
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
