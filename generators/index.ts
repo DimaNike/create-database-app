@@ -91,15 +91,9 @@ export default class extends Generator {
             
             const { protocol, hostname, port, serviceName } = retrieveConnectionStringDetailsFromORAFile( path.join( walletPath, 'tnsnames.ora' ) );
             this.options.connectionString = generateConnectionString( protocol, hostname, port, serviceName );
-        }
-        if(this.options.templateChoice.includes('mle-ts-ords-backend')) {
-            this.fs.copyTpl(
-                this.templatePath( '../../templates/mle-ts-sample' ),
-                this.destinationPath(),
-                {
-                    appName: this.options.appName
-                }
-            );
+            
+        }        
+        if(this.options.templateChoice.includes('mle-ts-ords-backend')) {            
             this.options.connectionUsername = this.options.connectionUsername.toLowerCase();
             this.fs.copyTpl(
                 this.templatePath( this.options.templateChoice ),

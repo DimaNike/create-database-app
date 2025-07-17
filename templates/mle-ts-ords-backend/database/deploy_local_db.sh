@@ -16,4 +16,8 @@ connect_local_app << EOF
 EOF
 echo "Migrations completed."
 
+echo "Synchronizing ORDS endpoints from src/routes with mle-cliw..."
+mle-cli --experimental build -c '<%= connectionUsername %>/<%= connectionPassword %>@localhost:<%= databasePort %>/<%= serviceName %>' create ords-fs
+echo "ORDS API configuration completed."
+
 popd

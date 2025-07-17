@@ -23,4 +23,9 @@ connect_stage_app << EOF
   lb update -changelog-file=migrations.json
 EOF
 echo "Migrations completed."
+
+echo "Synchronizing ORDS endpoints from src/routes with mle-cliw (staging config)..."
+MLECLI_USERNAME="$MLE_APP_USER_NAME" MLECLI_WALLET_PASS="$MLE_APP_WALLET_STAGE_PASS" MLECLI_PASSWORD="$MLE_APP_USER_STAGE_PASS" mle-cli --experimental build --config ../mleclistage.json create ords-fs
+echo "ORDS API configuration completed."
+
 popd

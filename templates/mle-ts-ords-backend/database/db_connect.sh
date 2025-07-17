@@ -4,11 +4,11 @@
 source ../.env
 
 connect_stage_admin() {
-  sql "admin/\"$MLE_APP_ADMIN_STAGE_PASS\"@devadb_tpurgent?TNS_ADMIN=../terraform/wallet/unzipped" "$@"
+  sql "admin/\"$MLE_APP_ADMIN_STAGE_PASS\"@$MLE_APP_DB_NAME_STAGE?TNS_ADMIN=../terraform/wallet/unzipped" "$@"
 }
 
 local_app_connect_string() {
-  echo "$MLE_APP_USER_NAME/\"$MLE_APP_USER_PASS\"@localhost:1235/FREEPDB1"
+  echo "$MLE_APP_USER_NAME/\"$MLE_APP_USER_PASS\"@localhost:<%= databasePort %>/<%= serviceName %>"
 }
 
 connect_local_app() {
@@ -16,9 +16,9 @@ connect_local_app() {
 }
 
 stage_app_connect_string() {
-  echo "$MLE_APP_USER_NAME/\"$MLE_APP_USER_STAGE_PASS\"@devadb_tpurgent?TNS_ADMIN=../terraform/wallet/unzipped"
+  echo "$MLE_APP_USER_NAME/\"$MLE_APP_USER_STAGE_PASS\"@$MLE_APP_DB_NAME_STAGE?TNS_ADMIN=../terraform/wallet/unzipped" "$@"
 }
 
 connect_stage_app() {
-  sql $(stage_app_connect_string) "$@"
+  sql "$MLE_APP_USER_NAME/\"$MLE_APP_USER_STAGE_PASS\"@$MLE_APP_DB_NAME_STAGE?TNS_ADMIN=../terraform/wallet/unzipped" "$@"
 }

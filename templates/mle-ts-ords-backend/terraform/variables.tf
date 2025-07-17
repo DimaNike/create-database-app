@@ -31,7 +31,7 @@ variable "adb_tde_wallet_zip_file" {
 }
 
 variable "dev_adb_wallet_password_specials" {
-  default = true
+  default = false
 }
 
 variable "dev_adb_wallet_password_length" {

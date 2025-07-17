@@ -5,14 +5,14 @@ provider "oci" {
 
 resource "random_password" "dev_adb_admin_password" {
   length           = 16
-  special          = true
+  special          = false
   min_numeric      = 2
   override_special = ""
 }
 
 resource "random_password" "app_user_stage_password" {
   length           = 16
-  special          = true
+  special          = false
   min_numeric      = 2
   override_special = ""
 }
@@ -37,7 +37,7 @@ resource "oci_database_autonomous_database" "dev_adb_database" {
 
 resource "random_password" "dev_wallet_password" {
   length           = var.dev_adb_wallet_password_length
-  special          = var.dev_adb_wallet_password_specials
+  special          = false
   min_numeric      = var.dev_adb_wallet_password_min_numeric
   override_special = var.dev_adb_wallet_password_override_special
 }
@@ -45,8 +45,12 @@ resource "random_password" "dev_wallet_password" {
 resource "local_file" "stage_env_secrets" {
   content  = <<EOF
 MLE_APP_WALLET_STAGE_PASS="${random_password.dev_wallet_password.result}"
+MLECLI_WALLET_PASS="${random_password.dev_wallet_password.result}"
+MLECLI_PASSWORD="${random_password.app_user_stage_password.result}"
 MLE_APP_USER_STAGE_PASS="${random_password.app_user_stage_password.result}"
 MLE_APP_ADMIN_STAGE_PASS="${random_password.dev_adb_admin_password.result}"
+MLE_APP_ORDS_URL="${oci_database_autonomous_database.dev_adb_database.connection_urls[0].ords_url}"
+MLE_APP_DB_NAME_STAGE="${oci_database_autonomous_database.dev_adb_database.connection_strings[0].profiles[0].display_name}"
 EOF
   filename = abspath("${path.module}/../.env.stage.auto")
   file_permission = "0600"
@@ -95,8 +99,8 @@ resource "null_resource" "run_bootstrap_stage" {
 resource "local_file" "mleclirc" {
   filename = abspath("${path.module}/../mleclistage.json")
   content  = jsonencode({
-    walletLocation        = abspath("${path.module}/wallets/unzipped")
-    connString = oci_database_autonomous_database.dev_adb_database.connection_strings[0].high
+    walletLocation        = abspath("${path.module}/wallet/unzipped")
+    connString = oci_database_autonomous_database.dev_adb_database.connection_strings[0].profiles[0].display_name
   })
   file_permission = "0600"
 }

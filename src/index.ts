@@ -483,11 +483,10 @@ export default class Generate extends Command {
             
             // This will be config object for the basic connection type.
             Object.assign(configObject, {
-                connectionString: generateConnectionString( protocol, hostname, port, serviceValue )
-            });
-            Object.assign(configObject, {
-                serviceName: serviceValue
-            });
+                connectionString: generateConnectionString( protocol, hostname, port, serviceValue ),
+                serviceName: serviceValue,
+                databasePort: port
+            });            
         } else if( databaseConnectionType === 'walletPath' ) {
             let walletPath = '';
 
@@ -550,7 +549,7 @@ export default class Generate extends Command {
             } );
         }
 
-        if(templateChoice == 'mle-ts-sample' || templateChoice == 'mle-ts-ords-backend') 
+        if(templateChoice == 'mle-ts-sample') 
         {
             // Ask the user for the path to SQLcl
             Object.assign( configObject, {
@@ -562,30 +561,6 @@ export default class Generate extends Command {
                         }
                     },
                 ) : sqlclPath
-            });
-        }
-        if (templateChoice == 'mle-ts-ords-backend') 
-        {
-            // Ask the user for the path to SQLcl
-            Object.assign( configObject, {
-                ordsHost: ordsHost === '' ? await input(
-                    {
-                        message: 'Please provide host name for your ORDS setup e.g. "localhost": ',
-                        validate ( input ) {
-                            return input.trim().length === 0 ? 'This field cannot be empty!' : true;
-                        }
-                    },
-                ) : ordsHost
-            });
-            Object.assign( configObject, {
-                ordsPort: ordsPort === '' ? await input(
-                    {
-                        message: 'Please provide port number for your ORDS setup e.g. "8080": ',
-                        validate ( input ) {
-                            return input.trim().length === 0 ? 'This field cannot be empty!' : true;
-                        }
-                    },
-                ) : ordsPort
             });
         }
 

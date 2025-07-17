@@ -10,8 +10,8 @@
         "dotenv": "^16.5.0",
         "mle-cli": "0.1.3"
     },
-    "scripts": {
-        "ords": "mle-cli --debug --experimental build -c 'userc/userc@localhost:1235/FREEPDB1' create ords-fs",
+    "scripts": {        
+        "ords_stage": "mle-cli --experimental build --config ./mleclistage.json create ords-fs",
         "test": "vitest"
     }
 }
