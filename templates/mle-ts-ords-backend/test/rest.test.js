@@ -1,7 +1,15 @@
 import { beforeEach, afterEach, describe, it, expect } from 'vitest';
+import dotenv from 'dotenv';
+dotenv.config({ path: ".env.stage.auto" });
 
-const BASE_URL = 'http://localhost:8080/ords/<%= connectionUsername %>';
+let BASE_URL = ""
+if (process.env.MLE_APP_ORDS_URL) {
+  BASE_URL = process.env.MLE_APP_ORDS_URL+"<%= connectionUsername %>";
+} else {
+  BASE_URL = 'http://localhost:8080/ords/<%= connectionUsername %>';
+}
 
+console.log("Testing: "+BASE_URL);
 let createdUserId;
 let skipCleanup = false;
 
